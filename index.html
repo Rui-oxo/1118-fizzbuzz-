@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FizzBuzz (1〜50)</title>
+  <style>
+    :root {
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-sub: #64748b;
+      --border-color: #e2e8f0;
+
+      --fizz-color: #0284c7;
+      --fizz-bg: #e0f2fe;
+      --buzz-color: #16a34a;
+      --buzz-bg: #dcfce7;
+      --fizzbuzz-color: #9333ea;
+      --fizzbuzz-bg: #f3e8ff;
+      --fizzbuzz-gradient: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+      --normal-color: #475569;
+      --normal-bg: #f1f5f9;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    header {
+      text-align: center;
+      max-width: 600px;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #2563eb, #9333ea);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      color: var(--text-sub);
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+    }
+
+    /* 凡例 (Legend) */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot-fizz { background-color: var(--fizz-color); }
+    .dot-buzz { background-color: var(--buzz-color); }
+    .dot-fizzbuzz { background: var(--fizzbuzz-gradient); }
+    .dot-normal { background-color: var(--normal-color); }
+
+    /* グリッドレイアウト */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 1rem;
+      width: 100%;
+      max-width: 900px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* カードデザイン */
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 1rem 0.75rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px -2px rgba(0, 0, 0, 0.08), 0 4px 8px -2px rgba(0, 0, 0, 0.04);
+    }
+
+    .card-num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-sub);
+      letter-spacing: 0.05em;
+    }
+
+    .card-val {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    /* 各種ステータス別スタイル */
+    .card.fizz {
+      border-color: #bae6fd;
+      background: linear-gradient(180deg, #ffffff 60%, var(--fizz-bg) 100%);
+    }
+    .card.fizz .card-val {
+      color: var(--fizz-color);
+    }
+
+    .card.buzz {
+      border-color: #bbf7d0;
+      background: linear-gradient(180deg, #ffffff 60%, var(--buzz-bg) 100%);
+    }
+    .card.buzz .card-val {
+      color: var(--buzz-color);
+    }
+
+    .card.fizzbuzz {
+      border: 2px solid transparent;
+      background: linear-gradient(white, white) padding-box,
+                  var(--fizzbuzz-gradient) border-box;
+      box-shadow: 0 4px 12px rgba(168, 85, 247, 0.15);
+    }
+    .card.fizzbuzz .card-val {
+      background: var(--fizzbuzz-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+    }
+
+    .card.normal {
+      background: var(--card-bg);
+    }
+    .card.normal .card-val {
+      color: var(--normal-color);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--text-sub);
+      font-size: 0.85rem;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>FizzBuzz Viewer</h1>
+    <p class="subtitle">1 から 50 までの数値を判定して表示しています。</p>
+
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot dot-normal"></span>通常</div>
+      <div class="legend-item"><span class="legend-dot dot-fizz"></span>Fizz (3の倍数)</div>
+      <div class="legend-item"><span class="legend-dot dot-buzz"></span>Buzz (5の倍数)</div>
+      <div class="legend-item"><span class="legend-dot dot-fizzbuzz"></span>FizzBuzz (15の倍数)</div>
+    </div>
+  </header>
+
+  <main class="grid-container" id="fizzbuzz-grid" aria-label="FizzBuzz結果リスト"></main>
+
+  <footer>
+    <p>1118-fizzbuzz &copy; 2026</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const grid = document.getElementById("fizzbuzz-grid");
+      const fragment = document.createDocumentFragment();
+
+      for (let i = 1; i <= 50; i++) {
+        let type = "normal";
+        let displayValue = String(i);
+
+        if (i % 15 === 0) {
+          type = "fizzbuzz";
+          displayValue = "FizzBuzz";
+        } else if (i % 3 === 0) {
+          type = "fizz";
+          displayValue = "Fizz";
+        } else if (i % 5 === 0) {
+          type = "buzz";
+          displayValue = "Buzz";
+        }
+
+        const card = document.createElement("div");
+        card.className = `card ${type}`;
+
+        const numEl = document.createElement("span");
+        numEl.className = "card-num";
+        numEl.textContent = `#${i}`;
+
+        const valEl = document.createElement("span");
+        valEl.className = "card-val";
+        valEl.textContent = displayValue;
+
+        card.appendChild(numEl);
+        card.appendChild(valEl);
+        fragment.appendChild(card);
+      }
+
+      grid.appendChild(fragment);
+    });
+  </script>
+</body>
+</html>
